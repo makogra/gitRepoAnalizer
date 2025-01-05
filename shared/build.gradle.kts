@@ -11,8 +11,17 @@ plugins {
 kotlin {
     jvm()
 //    js(IR) {
-//        browser()
+//        browser {
+//            // Configure the browser target
+//            commonWebpackConfig {
+//                cssSupport {
+//                    enabled = true
+//                }
+//            }
+//        }
+//        binaries.executable()
 //    }
+
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -33,6 +42,17 @@ kotlin {
     }
 
     sourceSets {
+//        val jsMain by getting {
+//            dependencies {
+//                implementation(kotlin("stdlib-js"))
+//            }
+//        }
+//        val jsTest by getting {
+//            dependencies {
+//                implementation(kotlin("test-js"))
+//            }
+//        }
+
 //        val ktor: String by project
         commonMain.dependencies {
             //put your multiplatform dependencies here
