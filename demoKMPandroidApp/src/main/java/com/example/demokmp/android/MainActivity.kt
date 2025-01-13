@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.demokmp.FakeAPI
-import com.example.demokmp.ui.FileUrlInputScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -30,7 +29,8 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    GreetingView(Greeting().greet())
 //                    DisplayData()
-                    FileUrlInputScreen()
+//                    FileUrlInputScreen()
+                    AppNavigation("home")
                 }
             }
         }
