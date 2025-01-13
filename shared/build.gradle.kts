@@ -83,6 +83,12 @@ kotlin {
                 implementation(compose.material3)
             }
         }
+
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.navigation.compose)
+            }
+        }
     }
 }
 
