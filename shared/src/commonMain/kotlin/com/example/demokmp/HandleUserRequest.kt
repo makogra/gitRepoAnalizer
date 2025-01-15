@@ -2,10 +2,11 @@ package com.example.demokmp
 
 class HandleUserRequest {
 
-    fun request(navigator: Navigator, userName: String, repo: String, path: String) {
+    fun request(onNavigateToRequest: (String) -> Unit, userName: String, repo: String, path: String) {
         println("Submitted name: ${userName}, repo ${repo}, path: ${path}")
         val url: String = getUrl(userName, repo, path)
         val file:String = getRawFile(url)
+        onNavigateToRequest(file)
         // show screen RawFileScreen(file)
     }
 

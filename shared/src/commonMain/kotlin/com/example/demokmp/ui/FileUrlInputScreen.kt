@@ -17,10 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.demokmp.HandleUserRequest
-import com.example.demokmp.Navigator
 
 @Composable
-fun FileUrlInputScreen(navigator: Navigator) {
+fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
     var fileUrl by remember { mutableStateOf(TextFieldValue("")) }
     var userName = remember { mutableStateOf(TextFieldValue("")) }
     var repo = remember { mutableStateOf(TextFieldValue("")) }
@@ -54,7 +53,7 @@ fun FileUrlInputScreen(navigator: Navigator) {
                 valueState = path
             )
             Button(
-                onClick = { HandleUserRequest().request(navigator, userName.value.text, repo.value.text, path.value.text) },
+                onClick = { HandleUserRequest().request(onNavigateToRequest, userName.value.text, repo.value.text, path.value.text) },
                 enabled = areInputsProvided(listOf(userName, repo, path))
             ) {
                 Text(text = "Submit")
