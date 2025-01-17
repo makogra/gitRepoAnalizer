@@ -2,10 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.compose)
-//    kotlin("plugin.compose")
-//    id("org.jetbrains.compose")
-//    alias(libs.plugins.kotlinx.serialization)
-//    kotlin("plugin.serialization") version "1.6.0"
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -52,26 +49,11 @@ kotlin {
 //                implementation(kotlin("test-js"))
 //            }
 //        }
-
-//        val ktor: String by project
         commonMain.dependencies {
-            //put your multiplatform dependencies here
-//            implementation("io.ktor:ktor-client-core:$ktor")
-//            implementation("io.ktor:ktor-client-cio:$ktor")
-//            implementation("io.ktor:ktor-client-content-negotiation:$ktor")
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.cio)
-//            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
-//            implementation(libs.kotlinx.serialization.core)
-//            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json") {
-//                version {
-//                    strictly("1.6.0")
-//                }
-//                exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-serialization-json-io")
-//                exclude(group = "org.jetbrains.kotlinx", module = "kotlinx-serialization-core-jvm")
-//            }
-
-//            implementation(libs.)
+            implementation(libs.ktor.client.content.negatiation)
+            implementation(libs.ktor.serialization)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -103,6 +85,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 }
+
 dependencies {
     implementation(libs.androidx.ui.text.android)
     implementation(libs.androidx.foundation.android)
