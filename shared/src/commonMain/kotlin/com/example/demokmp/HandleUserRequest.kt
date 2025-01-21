@@ -1,12 +1,45 @@
 package com.example.demokmp
 
+import com.example.demokmp.openAi.OpenAiMessage
+import com.example.demokmp.openAi.OpenAiRequest
+import com.example.demokmp.openAi.OpenAiResponse
+import com.example.demokmp.openAi.getOpenAiApiKey
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.contentType
+import io.ktor.http.isSuccess
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
+
 class HandleUserRequest {
 
-    fun request(onNavigateToRequest: (String) -> Unit, userName: String, repo: String, path: String) {
+
+
+//    val apiKey: String? =
+
+    suspend fun request(onNavigateToRequest: (String) -> Unit, userName: String, repo: String, path: String) {
         println("Submitted name: ${userName}, repo ${repo}, path: ${path}")
         val url: String = getUrl(userName, repo, path)
         val file:String = getRawFile(url)
-        onNavigateToRequest(file)
+
+        try {
+            val response = sendToGPT(file = file)
+            println("Response: ${response.choices.firstOrNull()?.message?.content}")
+            response.choices.firstOrNull()?.message?.content?.let { onNavigateToRequest(it) }
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            onNavigateToRequest(file)
+        }
+
+
         // show screen RawFileScreen(file)
     }
 
@@ -211,5 +244,47 @@ class HandleUserRequest {
         val result: String = "$baseURL/$userName/$repo/refs/heads/$path"
         println("result from getUrl= ${result}")
         return result
+    }
+
+    private suspend fun sendToGPT(
+        command: String = "Give a recomendation to inprove this code",
+        file: String,
+    ): OpenAiResponse {
+        val client = HttpClient(CIO) {
+            install(io.ktor.client.plugins.contentnegotiation.ContentNegotiation) {
+                json(Json {
+                    ignoreUnknownKeys = true
+                    prettyPrint = true
+                    isLenient = true
+                })
+            }
+        }
+
+        try {
+            val request = OpenAiRequest(
+                model = "gpt-4o-mini",
+                messages = listOf(OpenAiMessage(role = "user", content = command + "\n" + file)),
+                temperature = 0.7
+            )
+
+            val apiKey = getOpenAiApiKey()
+
+            val response: HttpResponse = client.post("https://api.openai.com/v1/chat/completions") {
+                contentType(ContentType.Application.Json)
+                header(HttpHeaders.Authorization, "Bearer $apiKey")
+                setBody(request)
+            }
+
+            if (response.status.isSuccess()) {
+                return response.body<OpenAiResponse>()
+            } else {
+                val errorBody: String = response.bodyAsText()
+                throw Exception("API Error: ${response.status} - $errorBody")
+            }
+        } catch (e: Exception) {
+            throw Exception("Failed to call OpenAI API: ${e.message}")
+        } finally {
+            client.close()
+        }
     }
 }
