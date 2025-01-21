@@ -122,5 +122,4 @@ dependencies {
     implementation(libs.androidx.ui.text.android)
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material3.android)
-//    implementation(files("/media/maciek/shared/dependenties/compose-compiler-1_5_13/compiler-hosted-1.5.13-dev-k2.0.0-RC1-50f08dfa4b4.jar"))
 }
