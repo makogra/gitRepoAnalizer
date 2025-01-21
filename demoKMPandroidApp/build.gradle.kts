@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose)
     alias(libs.plugins.kotlinx.serialization)
 }
 
@@ -20,7 +20,7 @@ android {
     }
     composeOptions {
 //        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-        kotlinCompilerExtensionVersion = "1.5.15"
+        kotlinCompilerExtensionVersion = "1.5.5"
     }
     packaging {
         resources {
