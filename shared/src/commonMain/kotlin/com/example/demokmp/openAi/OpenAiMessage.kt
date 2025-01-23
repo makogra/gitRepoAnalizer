@@ -26,24 +26,24 @@ data class OpenAiResponse(
 ) {
     @Serializable
     data class UsageDetails(
-        val promptTokens: Int,
-        val completionTokens: Int,
-        val totalTokens: Int,
-        val completionTokensDetails: CompletionTokensDetails
+        val prompt_tokens: Int,
+        val completion_tokens: Int,
+        val total_tokens: Int,
+        val completion_tokens_details: CompletionTokensDetails
     )
 
     @Serializable
     data class CompletionTokensDetails(
-        val reasoningTokens: Int,
-        val acceptedPredictionTokens: Int,
-        val rejectedPredictionTokens: Int
+        val reasoning_tokens: Int,
+        val accepted_prediction_tokens: Int,
+        val rejected_prediction_tokens: Int
     )
 
     @Serializable
     data class Choice(
         val message: Message,
         val logprobs: String?,
-        val finishReason: String,
+        val finish_reason: String,
         val index: Int
     ) {
         @Serializable

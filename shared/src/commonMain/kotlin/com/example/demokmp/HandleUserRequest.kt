@@ -4,10 +4,12 @@ import com.example.demokmp.openAi.OpenAiMessage
 import com.example.demokmp.openAi.OpenAiRequest
 import com.example.demokmp.openAi.OpenAiResponse
 import com.example.demokmp.openAi.getOpenAiApiKey
+import com.example.demokmp.openAi.getOpenAiOrganizationID
+import com.example.demokmp.openAi.getOpenAiProjectID
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.request.header
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
@@ -29,9 +31,9 @@ class HandleUserRequest {
         println("Submitted name: ${userName}, repo ${repo}, path: ${path}")
         val url: String = getUrl(userName, repo, path)
         val file:String = getRawFile(url)
-
+        val codeSnipped: String = getCodeSnipped()
         try {
-            val response = sendToGPT(file = file)
+            val response = sendToGPT(file = codeSnipped)
             println("Response: ${response.choices.firstOrNull()?.message?.content}")
             response.choices.firstOrNull()?.message?.content?.let { onNavigateToRequest(it) }
         } catch (e: Exception) {
@@ -41,6 +43,39 @@ class HandleUserRequest {
 
 
         // show screen RawFileScreen(file)
+    }
+
+    private fun getCodeSnipped(): String {
+        return """
+            @Composable
+fun RawFileScreen(fileContent: String) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        SelectionContainer {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Text(
+                    text = fileContent,
+                    style = TextStyle(
+                        fontFamily = FontFamily.Monospace,
+                        fontSize = 14.sp,
+                        lineHeight = 20.sp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+    }
+}
+        """.trimIndent()
     }
 
     private fun getRawFile(url: String): String {
@@ -247,7 +282,7 @@ class HandleUserRequest {
     }
 
     private suspend fun sendToGPT(
-        command: String = "Give a recomendation to inprove this code",
+        command: String = "Give a short recomendation to inprove some portion of this code, so that the ",
         file: String,
     ): OpenAiResponse {
         val client = HttpClient(CIO) {
@@ -268,10 +303,17 @@ class HandleUserRequest {
             )
 
             val apiKey = getOpenAiApiKey()
+            val orgId = getOpenAiOrganizationID()
+            val projectId = getOpenAiProjectID()
 
             val response: HttpResponse = client.post("https://api.openai.com/v1/chat/completions") {
                 contentType(ContentType.Application.Json)
-                header(HttpHeaders.Authorization, "Bearer $apiKey")
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $apiKey")
+                    append("OpenAI-Organization", orgId)
+                    append("OpenAI-Project", projectId)
+                }
+
                 setBody(request)
             }
 

@@ -73,13 +73,13 @@ kotlin {
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-//        val commonMain by getting {
-//            dependencies {
-//                implementation(compose.runtime)
-//                implementation(compose.foundation)
-//                implementation(compose.material3)
-//            }
-//        }
+        val commonMain by getting {
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+            }
+        }
 
         val androidMain by getting {
             dependencies {
