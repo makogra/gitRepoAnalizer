@@ -8,15 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.demokmp.App
-import com.example.demokmp.FakeAPI
 
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +23,6 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 //                    GreetingView(Greeting().greet())
-//                    DisplayData()
 //                    FileUrlInputScreen()
 //                    AppNavigation("home")
                     App()
@@ -38,21 +31,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-@Composable
-fun DisplayData() {
-    var result by remember { mutableStateOf("Loading...") }
-
-    LaunchedEffect(Unit) {
-        FakeAPI().apply {
-            result = this.getFakeApiResponse()
-        }
-        // Call the shared code
-    }
-
-    Text(text = result)
-}
-
 
 @Composable
 fun GreetingView(text: String) {
