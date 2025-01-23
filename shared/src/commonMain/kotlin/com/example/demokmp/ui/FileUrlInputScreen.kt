@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -18,7 +19,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.demokmp.HandleUserRequest
@@ -26,6 +26,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
+
+
     var userName = remember { mutableStateOf(TextFieldValue("")) }
     var repo = remember { mutableStateOf(TextFieldValue("")) }
     var path = remember { mutableStateOf(TextFieldValue("")) }
@@ -64,7 +66,7 @@ fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
             )
 
             errorMessage?.let { message ->
-                Text(text = message, color = Color.Red, modifier = Modifier.padding(8.dp))
+                Text(text = message, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(8.dp))
             }
 
             Button(
@@ -72,7 +74,7 @@ fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
                     coroutineScope.launch {
                         try {
                             isLoading = true
-                            errorMessage = null // Clear previous errors
+                            errorMessage = null
                             HandleUserRequest().request(
                                 onNavigateToRequest,
                                 userName.value.text,
@@ -90,7 +92,7 @@ fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                         modifier = Modifier.size(16.dp)
                     )
                 } else {
