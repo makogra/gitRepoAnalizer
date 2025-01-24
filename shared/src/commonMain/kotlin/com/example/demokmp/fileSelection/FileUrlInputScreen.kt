@@ -11,35 +11,24 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import com.example.demokmp.HandleUserRequest
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
-
-
-    var userName = remember { mutableStateOf(TextFieldValue("")) }
-    var repo = remember { mutableStateOf(TextFieldValue("")) }
-    var path = remember { mutableStateOf(TextFieldValue("")) }
-
-    val hintUser = "User name"
-    val hintRepo = "Repo name"
-    val hintPath = "Path to file ex. /master/main.java"
-
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-
-    val coroutineScope = rememberCoroutineScope()
+fun FileUrlInputScreen(
+    viewModel: FileUrlInputViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+    onNavigateToRequest: (String) -> Unit
+) {
+    val userName by viewModel.userName.collectAsState()
+    val repo by viewModel.repo.collectAsState()
+    val path by viewModel.path.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -51,44 +40,38 @@ fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
         ) {
             InputSection(
                 label = "Enter user name",
-                hint = hintUser,
-                valueState = userName
+                hint = "User name",
+                valueState = userName,
+                onValueChange = { viewModel.onUserNameChange(it) }
             )
             InputSection(
                 label = "Enter repo",
-                hint = hintRepo,
-                valueState = repo
+                hint = "Repo name",
+                valueState = repo,
+                onValueChange = { viewModel.onRepoChange(it) }
             )
             InputSection(
                 label = "Enter path to specific file",
-                hint = hintPath,
-                valueState = path
+                hint = "Path to file (e.g., /master/main.java)",
+                valueState = path,
+                onValueChange = { viewModel.onPathChange(it) }
             )
 
             errorMessage?.let { message ->
-                Text(text = message, color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(8.dp))
+                Text(
+                    text = message,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(8.dp)
+                )
             }
 
             Button(
                 onClick = {
-                    coroutineScope.launch {
-                        try {
-                            isLoading = true
-                            errorMessage = null
-                            HandleUserRequest().request(
-                                onNavigateToRequest,
-                                userName.value.text,
-                                repo.value.text,
-                                path.value.text
-                            )
-                        } catch (e: Exception) {
-                            errorMessage = "Error: ${e.message}"
-                        } finally {
-                            isLoading = false
-                        }
+                    viewModel.viewModelScope.launch {
+                        viewModel.handleSubmit(onNavigateToRequest)
                     }
                 },
-                enabled = areInputsProvided(listOf(userName, repo, path)) && !isLoading
+                enabled = userName.isNotBlank() && repo.isNotBlank() && path.isNotBlank() && !isLoading
             ) {
                 if (isLoading) {
                     CircularProgressIndicator(
@@ -99,25 +82,8 @@ fun FileUrlInputScreen(onNavigateToRequest: (String) -> Unit) {
                     Text(text = "Submit")
                 }
             }
-
-//            Button(
-//                onClick = { HandleUserRequest().request(onNavigateToRequest, userName.value.text, repo.value.text, path.value.text) },
-//                enabled = areInputsProvided(listOf(userName, repo, path))
-//            ) {
-//                Text(text = "Submit")
-//            }
         }
     }
 }
-
-fun areInputsProvided(listOfInputs: List<MutableState<TextFieldValue>>): Boolean {
-    for (input in listOfInputs) {
-        if (input.value.text.isEmpty()) {
-            return false
-        }
-    }
-    return true
-}
-
 
 

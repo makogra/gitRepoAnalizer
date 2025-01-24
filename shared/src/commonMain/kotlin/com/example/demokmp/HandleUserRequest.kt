@@ -1,12 +1,12 @@
 package com.example.demokmp
 
 import com.example.demokmp.keys.getGithubToken
+import com.example.demokmp.keys.getOpenAiApiKey
+import com.example.demokmp.keys.getOpenAiOrganizationID
+import com.example.demokmp.keys.getOpenAiProjectID
 import com.example.demokmp.openAi.OpenAiMessage
 import com.example.demokmp.openAi.OpenAiRequest
 import com.example.demokmp.openAi.OpenAiResponse
-import com.example.demokmp.openAi.getOpenAiApiKey
-import com.example.demokmp.openAi.getOpenAiOrganizationID
-import com.example.demokmp.openAi.getOpenAiProjectID
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
@@ -96,6 +96,10 @@ class HandleUserRequest {
         }
 
         try {
+            val apiKey = getOpenAiApiKey()
+            val orgId = getOpenAiOrganizationID()
+            val projectId = getOpenAiProjectID()
+
             val request = OpenAiRequest(
                 model = "gpt-4o-mini",
                 messages = listOf(
@@ -105,10 +109,6 @@ class HandleUserRequest {
                 temperature = 0.7
             )
 
-            val apiKey = getOpenAiApiKey()
-            val orgId = getOpenAiOrganizationID()
-            val projectId = getOpenAiProjectID()
-
             val response: HttpResponse = client.post("https://api.openai.com/v1/chat/completions") {
                 contentType(ContentType.Application.Json)
                 headers {
@@ -116,7 +116,6 @@ class HandleUserRequest {
                     append("OpenAI-Organization", orgId)
                     append("OpenAI-Project", projectId)
                 }
-
                 setBody(request)
             }
 

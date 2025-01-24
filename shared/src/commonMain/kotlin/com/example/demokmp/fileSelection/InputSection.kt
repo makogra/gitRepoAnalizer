@@ -12,11 +12,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -58,7 +56,8 @@ import androidx.compose.ui.unit.sp
 fun InputSection(
     label: String,
     hint: String,
-    valueState: MutableState<TextFieldValue>,
+    valueState: String,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -79,10 +78,9 @@ fun InputSection(
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(horizontal = 12.dp),
-            contentAlignment = Alignment.CenterStart // Ensures that all content is vertically centered
+            contentAlignment = Alignment.CenterStart
         ) {
-            // Stack hint and text inside the box
-            if (valueState.value.text.isEmpty()) {
+            if (valueState.isEmpty()) {
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.bodyMedium.copy(
@@ -91,12 +89,12 @@ fun InputSection(
                 )
             }
             BasicTextField(
-                value = valueState.value,
-                onValueChange = { valueState.value = it },
-                modifier = Modifier.fillMaxWidth(), // Covers the entire width of the box
+                value = valueState,
+                onValueChange = onValueChange,
+                modifier = Modifier.fillMaxWidth(),
                 textStyle = MaterialTheme.typography.bodyMedium.copy(
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
-                    lineHeight = 20.sp // Ensures vertical alignment matches hint
+                    lineHeight = 20.sp
                 ),
                 singleLine = true
             )

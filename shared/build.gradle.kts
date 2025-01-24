@@ -70,7 +70,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
-
+            implementation(libs.kotlinx.coroutines.core)
         }
 
         commonTest.dependencies {
@@ -88,6 +88,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.navigation.compose)
+                implementation(libs.kotlinx.coroutines.android)
             }
         }
 
