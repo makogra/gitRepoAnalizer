@@ -38,7 +38,8 @@ class HandleUserRequest {
             onNavigateToRequest(file)
         }
 
-//        onNavigateToRequest(file)
+
+//        onNavigateToRequest(getExampleResponse())
     }
 
     private suspend fun getRawFile(url: String): String {

@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.example.demokmp.fileSelection.FileUrlInputScreen
-import com.example.demokmp.ui.RawFileScreen
+import com.example.demokmp.ui.EnhancedRawFileScreen
 
 sealed class Screen {
     data object Home: Screen()
@@ -25,7 +25,7 @@ fun App() {
 
     when (val screen = currentScreen) {
         is Screen.Home -> FileUrlInputScreen(onNavigateToRequest = { file -> currentScreen = Screen.FileAnalyzer(file) })
-        is Screen.FileAnalyzer -> RawFileScreen(
+        is Screen.FileAnalyzer -> EnhancedRawFileScreen(
             fileContent = screen.file
         )
 //        is Screen.Details -> DetailScreen(onNavigateBack = { currentScreen = Screen.Home })
