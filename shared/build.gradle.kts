@@ -58,6 +58,7 @@ kotlin {
 //        val jsTest by getting {
 //            dependencies {
 //                implementation(kotlin("test-js"))
+//                implementation(libs.junit)
 //            }
 //        }
         commonMain.dependencies {
@@ -74,6 +75,7 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+//            implementation(libs.junit)
         }
         val commonMain by getting {
             dependencies {
@@ -86,6 +88,13 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(libs.navigation.compose)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(kotlin("test"))
+                implementation(libs.junit)
             }
         }
     }
@@ -118,7 +127,9 @@ android {
 //    stabilityConfigurationFile = rootProject.layout.projectDirectory.file("stability_config.conf")
 //}
 
+tasks.withType<Test> {
 
+}
 
 dependencies {
     implementation(libs.androidx.ui.text.android)
@@ -126,4 +137,6 @@ dependencies {
     implementation(libs.androidx.material3.android)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    testImplementation(libs.junit)
+    implementation(libs.junit)
 }
