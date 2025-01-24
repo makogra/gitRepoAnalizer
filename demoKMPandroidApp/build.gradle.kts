@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.navigation.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 //    implementation(libs.kotlinx.serialization.core) {
 //        version {
 //            strictly("1.6.0")

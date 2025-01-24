@@ -9,10 +9,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.demokmp.ui.FileUrlInputScreen
+import com.example.demokmp.fileSelection.FileUrlInputScreen
 import com.example.demokmp.ui.RawFileScreen
-
-//import androidx.navigation.NavHostController
 
 sealed class Screen {
     data object Home: Screen()

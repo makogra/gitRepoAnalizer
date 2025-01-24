@@ -1,4 +1,4 @@
-package com.example.demokmp.ui
+package com.example.demokmp.fileSelection
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
