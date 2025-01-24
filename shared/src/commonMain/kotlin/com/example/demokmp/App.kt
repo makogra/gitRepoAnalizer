@@ -15,8 +15,6 @@ import com.example.demokmp.ui.EnhancedRawFileScreen
 sealed class Screen {
     data object Home: Screen()
     data class FileAnalyzer(val file: String) : Screen()
-
-//    object Details : Screen()
 }
 
 @Composable

@@ -51,15 +51,6 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-//    implementation(libs.kotlinx.serialization.core) {
-//        version {
-//            strictly("1.6.0")
-//        }
-//    }
-//    implementation(libs.kotlinx.serialization.json)
     debugImplementation(libs.compose.ui.tooling)
     testImplementation(libs.junit)
 }
-//repositories {
-//    google()
-//}

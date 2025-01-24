@@ -38,7 +38,6 @@ class HandleUserRequest {
             onNavigateToRequest(file)
         }
 
-
 //        onNavigateToRequest(getExampleResponse())
     }
 
@@ -84,7 +83,6 @@ class HandleUserRequest {
             2. **Code snippet**: Provide the code fragment with the implementation of the solution, focusing on only the changed part to minimize token usage.
             3. **Explanation**: (optional, depending on the issue, e.g., skip for renaming) Provide a brief explanation of why this change is necessary.
         """.trimIndent(),
-//            "Give a short recomendation to inprove some portion of this code, so that the ",
         file: String,
     ): OpenAiResponse {
         val client = HttpClient(CIO) {
